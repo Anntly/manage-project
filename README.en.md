@@ -1,5 +1,3 @@
-
-
 <p align="center">
   <img  src="https://github.com/mgbq/nx-admin/blob/master/src/assets/img/home/logo.png">
 </p>
@@ -21,58 +19,79 @@
     <img src="https://img.shields.io/badge/release-1.2-blue.svg" alt="GitHub release">
   </a>
   
-  > ## :gem: Vue自动化管理系统
+  > ## :gem: Vue Automated management system
 </p>
 
-简体中文 | [English](./README.en.md)
+English | [简体中文](./README.md)
+
+## Introduction
+
+> A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
+
+**Live demo:** http://mgbq.github.io/nxAdmin-template
 
 
-# nxAdmin-template
-
-> 这是一个 极简的vue admin 管理后台 它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
-
-[线上地址](http://mgbq.github.io/nxAdmin-template)
-
-## Extra
-如果你想要根据用户角色来动态生成侧边栏和router，你可以使用改分支[permission-control](https://github.com/mgbq/nx-admin/releases/tag/v1.0.0)
- 
- ## 相关项目
- [nx-admin](https://github.com/mgbq/nx-admin)
-
-## 相关文档
+ ## related documents
 [老板让我十分钟上手nx-admin](https://juejin.im/post/5b43226c51882519ad616c2a)
 
 [Vue2.0实现的用户权限控制](http://blog.csdn.net/qq_32340877/article/details/79416344)
 
 
+## Extra
+If you want router permission && generate menu by user roles , you can use this branch [permission-control](https://github.com/mgbq/nx-admin/releases/tag/v1.0.0)
 
-欢迎你为 nx-admin的开发作出贡献（代码编写/文档翻译）。
+## Related Project
+ [nx-admin](https://github.com/mgbq/nx-admin)
 
-## 开发
+
+## download
+
+git：`git clone https://github.com/mgbq/nx-admin.git`
+
+npm：`npm install`
+
+
+## Preview [nxAdmin-template](https://mgbq.github.io/nxAdmin-template/#/login)
+
+test account:
+
+``` bash
+1. username: admin
+   password: any
+2. username: editor
+   password: any
+```
+
+
+
+
+You are welcome to contribute to the development of nxAdmin-template (code writing/document translation)。
+
+
+## Getting started
+
 ```bash
-# 克隆项目
+# clone the project
 git clone https://github.com/mgbq/nxAdmin-template.git
 
-# 安装依赖
+# install dependency
 npm install
-   
-# 建议不要用cnpm安装 会有各种诡异的bug 可以通过如下操作解决 npm 下载速度慢的问题
-npm install --registry=https://registry.npm.taobao.org
 
-# 启动服务
+# develop
 npm run dev
 ```
 
-## 发布
+
+## Build
 ```bash
-# 构建测试环境
+# build for test environment
 npm run build:sit
 
-# 构建生产环境
+# build for production environment
 npm run build:prod
 ```
 
-## 其它
+## Advanced
 ```bash
 # --report to build with bundle size analytics
 npm run build:prod --report
@@ -86,10 +105,10 @@ npm run lint
 # auto fix
 npm run lint -- --fix
 ```
-## 捐赠 觉得不错 赏个咖啡 让作者打起精神 ~
+## Donate Buy me a coffee ~
 <img src="./github/二维码.jpg" width="400px" height="460px" alt="捐赠扫一扫">
 
 ## License
 
 [MIT](https://github.com/mgbq/nxAdmin-template/blob/master/LICENSE)
-Copyright (c) 2018-present nxmin
+Copyright (c) 2018-present nxAdmin-template
