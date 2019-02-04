@@ -3,6 +3,17 @@
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters" @submit.native.prevent>
+        <el-dropdown>
+          <el-button type="primary">
+            选择店铺
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <template v-for="item in restaurants">
+              <el-dropdown-item :key="item.id">{{item.name}}</el-dropdown-item>
+            </template>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-form-item>
           <el-input v-model="filters.id" placeholder="ID"></el-input>
         </el-form-item>
@@ -146,13 +157,15 @@ import {
   changeSaleStatus
 } from "@/api/dishTable";
 import { getCas, getIds, getNodes } from "@/api/category";
+import { getRestaurantNodes } from "@/api/dishMenu";
 import QS from "qs";
 import { Message, MessageBox } from "element-ui";
 
 export default {
-  name: "dishManage",
+  name: "MenuManage",
   data() {
     return {
+      restaurants: [],
       loading: true,
       options: [], // 级联选择器结果
       childrens: [], //所有的子节点
@@ -272,7 +285,7 @@ export default {
           this.total = res.total;
           this.totalPage = res.totalPage;
           this.foods = res.items;
-          this.loading = false
+          this.loading = false;
         })
         .catch();
     },
@@ -288,6 +301,9 @@ export default {
     },
     getOptions() {
       getCas().then(res => (this.options = res));
+    },
+     getRestaurants() {
+      getRestaurantNodes().then(res => (this.restaurants = res));
     },
     getChildrens() {
       getNodes().then(res => (this.childrens = res));
@@ -432,15 +448,23 @@ export default {
       this.getFoods();
     }
   },
-  created() {
-    
-  },
+  created() {},
   mounted() {
     this.getOptions();
     this.getChildrens();
     this.getFoods();
+    this.getRestaurants();
   }
 };
 </script>
 <style scoped>
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>

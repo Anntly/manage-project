@@ -137,8 +137,32 @@ export const constantRouterMap = [
         meta: { title: 'CategoryManage', icon: 'fenlei' }
       }
     ]
+  },
+  // 餐厅管理(餐厅管理 菜单管理 菜单菜品管理)
+  {
+    path: '/shop',
+    component: Layout,
+    redirect: '/shop/restaurant-manage',
+    name: 'shop',
+    meta: {
+      title: 'Shop',
+      icon: 'canting_1'
+    },
+    children: [
+      {
+        path: 'restaurant-manage',
+        component: () => import('@/views/shop/restaurant-manage'),
+        name: 'RestaurantManage',
+        meta: { title: 'RestaurantManage', icon: 'canting' }
+      },
+      {
+        path: 'menu-manage',
+        component: () => import('@/views/shop/menu-manage'),
+        name: 'MenuManage',
+        meta: { title: 'MenuManage', icon: 'navicon-ctgl' }
+      }
+    ]
   }
-
 ]
 
 export default new Router({
