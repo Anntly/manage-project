@@ -39,4 +39,9 @@ export function changeSaleStatus(params) {
     method: 'put'
   })
 }
-
+export function getFoodNodes(params) {
+  return request({
+    url: '/dish/food/cid/' + params,
+    method: 'get'
+  })
+}

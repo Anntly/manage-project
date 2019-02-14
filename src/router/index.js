@@ -160,6 +160,20 @@ export const constantRouterMap = [
         component: () => import('@/views/shop/menu-manage'),
         name: 'MenuManage',
         meta: { title: 'MenuManage', icon: 'navicon-ctgl' }
+      },
+      {
+        path: 'menu-cat-manage',
+        component: () => import('@/views/shop/menu-cat-manage'),
+        name: 'MenuCatManage',
+        meta: { title: 'MenuCatManage', icon: 'fenlei' },
+        hidden: true
+      },
+      {
+        path: 'menu-food-manage',
+        component: () => import('@/views/shop/menu-food-manage'),
+        name: 'MenuFoodManage',
+        meta: { title: 'MenuFoodManage', icon: 'navicon-cprkd' },
+        hidden: true
       }
     ]
   }

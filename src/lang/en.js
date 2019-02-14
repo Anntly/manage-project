@@ -29,6 +29,8 @@ export default {
     Table: 'Table',
     Dish: 'Dish',
     Shop: 'Restaurant',
+    MenuCatManage: 'MenuCategoryManage',
+    MenuFoodManage: 'MenuFoodManage',
     Icons: 'Icons',
     treeChart: 'treeChart',
     gaugeChart: 'gaugeChart',

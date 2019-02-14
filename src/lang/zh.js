@@ -46,6 +46,8 @@ export default {
     CategoryManage: '分类管理',
     RestaurantManage: '餐厅管理',
     MenuManage: '菜单管理',
+    MenuCatManage: '菜单菜品分类管理',
+    MenuFoodManage: '菜单菜品管理',
     VueEditor: '文本编辑',
     Upload: '文件上传',
     Components: '组件',

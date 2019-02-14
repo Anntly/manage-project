@@ -3,28 +3,14 @@
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" @submit.native.prevent>
-        <el-dropdown>
-          <el-button type="primary">
-            选择店铺
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <template v-for="item in restaurants">
-              <el-dropdown-item
-                :key="item.id"
-                @click.native="selectResturant(item.id)"
-              >{{item.name}}</el-dropdown-item>
-            </template>
-          </el-dropdown-menu>
-        </el-dropdown>
         <el-form-item>
-          <el-input v-model="filters.id" placeholder="ID"></el-input>
+          <el-input  v-model="filters.id" placeholder="ID"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="菜单名称"></el-input>
+          <el-input v-model="filters.name" placeholder="分类名称"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getMenus">查询</el-button>
+          <el-button type="primary" v-on:click="getCategories">查询</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -32,10 +18,10 @@
         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
       </el-form>
     </el-col>
-
+    <!-- <el-button type="success" round @click="handleBack()">返回</el-button> -->
     <!--列表-->
     <el-table
-      :data="menus"
+      :data="categories"
       :default-sort="{prop: 'id', order: 'descending'}"
       @sort-change="handleSortChange"
       stripe
@@ -46,25 +32,14 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column sortable="custom" prop="id" label="ID"></el-table-column>
-      <el-table-column prop="name" label="菜单名"></el-table-column>
-      <el-table-column prop="restaurantId" label="餐厅Id"></el-table-column>
-      <el-table-column prop="restaurantName" label="餐厅名称"></el-table-column>
-      <el-table-column prop="description" label="菜单介绍"></el-table-column>
-      <el-table-column
-        prop="status"
-        label="菜单状态"
-        :formatter="statusFormatter"
-        :filters="[{ text: '下架', value: 0 },{ text: '正常', value: 1 }, { text: '审核中', value: 2 }]"
-        :filter-method="filterStatus"
-      ></el-table-column>
+      <el-table-column prop="name" label="分类名称" ></el-table-column>
+      <el-table-column prop="menuId" label="菜单名称" :formatter="menuFormatter"></el-table-column>
       <el-table-column sortable="custom" prop="create_time" label="更新时间" width="120"></el-table-column>
       <el-table-column sortable="custom" prop="update_time" label="更新时间" width="120"></el-table-column>
       <el-table-column label="操作" width="350">
         <template slot-scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-          <el-button type="info" size="small" @click="toFoodCat(scope.$index, scope.row)">菜品分类</el-button>
-          <el-button type="info" size="small" @click="toFood(scope.$index, scope.row)">菜品管理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,19 +62,14 @@
       :close-on-click-modal="false"
     >
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="ID" prop="id">
+        <el-form-item v-if="false" label="ID" prop="id">
           <el-input v-model="editForm.id" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="菜单名" prop="name">
+        <el-form-item v-if="false" label="ID" prop="id">
+          <el-input v-model="editForm.menuId" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="分类名称" prop="name">
           <el-input v-model="editForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="菜单描述" prop="description">
-          <el-input type="textarea" v-model="editForm.description"></el-input>
-        </el-form-item>
-        <el-form-item label="店铺选择">
-          <el-select  v-model="editForm.restaurantId" placeholder="请选择活动区域">
-            <el-option v-for="item in restaurants" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -112,20 +82,21 @@
 </template>
 <script>
 import {
-  getRestaurantNodes,
-  getMenuPage,
-  removeMenu,
-  batchRemoveMenu,
-  editMenu,
-  addMenu
+  removeMenuFoodCat,
+  batchRemoveMenuFoodCat,
+  editMenuCategory,
+  addMenuCategory,
+  getMenuCategoryPage
 } from "@/api/dishMenu";
 import QS from "qs";
 import { Message, MessageBox } from "element-ui";
 
 export default {
-  name: "MenuManage",
+  name: "MenuCatManage",
   data() {
     return {
+      menuName: this.$route.params.name,
+      menuId:this.$route.params.id,
       restaurants: [],
       loading: true,
       options: [], // 级联选择器结果
@@ -139,10 +110,10 @@ export default {
       filters: {
         id: null,
         name: "",
-        restaurantId: null
+        menuId: this.menuId
       },
       key: "",
-      menus: [],
+      categories: [],
       total: 0,
       totalPage: 0,
       page: 1,
@@ -154,8 +125,7 @@ export default {
       editForm: {
         id: 0,
         name: "",
-        restaurantId: 0,
-        status: 0
+        menuId : this.menuId
       },
 
       addFormVisible: false, // 新增界面是否显示
@@ -165,31 +135,20 @@ export default {
       productImgs: [], // 文件列表
       isMultiple: true,
       imgLimit: 1, // 上传文件数量
-      dialogStatus: ""
+      dialogStatus: "",
+      selectedTag: {}
     };
   },
   methods: {
-    toFoodCat(index,row){
-      this.$router.push({name: 'MenuCatManage',params:{ id:row.id,name:row.name}});
-    },
-    toFood(index,row){
-      this.$router.push({name: 'MenuFoodManage',params:{ id:row.id,name:row.name,restaurantName:row.restaurantName,restaurantId:row.restaurantId}});
-    },
     selectResturant(restaurantId) {
       this.filters.restaurantId = restaurantId;
-      this.getMenus();
+      this.getCategories();
     },
     filterStatus(value, row) {
       return row.status === value;
     },
-    statusFormatter(row, column) {
-      if (row.status === 2) {
-        return "审核中";
-      } else if (row.status === 1) {
-        return "正常";
-      } else {
-        return "下架";
-      }
+    menuFormatter(row, column) {
+      return this.menuName;
     },
     handleRemove(file, fileList) {
       //移除图片
@@ -237,23 +196,24 @@ export default {
     },
     handleCurrentChange(val) {
       this.page = val;
-      this.getMenus();
+      this.getCategories();
     },
     // 处理filters的数据
     checkObj(para) {
+      this.filters.menuId = this.menuId
       para.key = JSON.stringify(this.filters);
-      getMenuPage(para)
+      getMenuCategoryPage(para)
         .then(res => {
           this.total = res.total;
           this.totalPage = res.totalPage;
-          this.menus = res.items;
+          this.categories = res.items;
           this.loading = false;
           this.filters = {}
         })
         .catch();
     },
     // 获取用户列表
-    getMenus() {
+    getCategories() {
       const para = {
         key: this.filters,
         page: this.page,
@@ -262,21 +222,18 @@ export default {
       };
       this.checkObj(para);
     },
-    getRestaurants() {
-      getRestaurantNodes().then(res => (this.restaurants = res));
-    },
     // 删除
     handleDel(index, row) {
       this.$confirm("确认删除该记录吗?", "提示", {
         type: "warning"
       })
         .then(() => {
-          removeMenu(row.id).then(res => {
+          removeMenuFoodCat(row.id).then(res => {
             this.$message({
               message: "删除成功",
               type: "success"
             });
-            this.getMenus();
+            this.getCategories();
           });
         })
         .catch(() => {});
@@ -294,8 +251,7 @@ export default {
       this.editForm = {
         id: 0,
         name: "",
-        restaurantId: 0,
-        status: 0
+        menuId : this.menuId
       };
     },
     // 编辑
@@ -305,7 +261,7 @@ export default {
           this.$confirm("确认提交吗？", "提示", {})
             .then(() => {
               const para = Object.assign({}, this.editForm);
-              editMenu(para).then(res => {
+              editMenuCategory(para).then(res => {
                 this.$message({
                   message: "提交成功",
                   type: "success"
@@ -313,7 +269,7 @@ export default {
                 this.$refs["editForm"].resetFields();
                 this.dialogFormVisible = false;
                 this.selectedOptions = [];
-                this.getMenus();
+                this.getCategories();
               });
             })
             .catch(e => {
@@ -331,14 +287,14 @@ export default {
             .then(() => {
               const para = Object.assign({}, this.editForm);
               console.log(para);
-              addMenu(para).then(res => {
+              addMenuCategory(para).then(res => {
                 this.$message({
                   message: "提交成功",
                   type: "success"
                 });
                 this.$refs["editForm"].resetFields();
                 this.dialogFormVisible = false;
-                this.getMenus();
+                this.getCategories();
               });
             })
             .catch(e => {
@@ -355,17 +311,17 @@ export default {
     // 批量删除
     batchRemove() {
       var ids = this.sels.map(item => item.id).toString();
-      this.$confirm("确认删除选中记录吗(会删除该菜单下的所有菜品与分类)？", "提示", {
+      this.$confirm("确认删除选中记录吗(会删除该分类下所有的菜品)？", "提示", {
         type: "warning"
       })
         .then(() => {
           const para = { ids: ids };
-          batchRemoveMenu(para).then(res => {
+          batchRemoveMenuFoodCat(para).then(res => {
             this.$message({
               message: "删除成功",
               type: "success"
             });
-            this.getMenus();
+            this.getCategories();
           });
         })
         .catch(() => {});
@@ -374,13 +330,14 @@ export default {
     handleSortChange(column) {
       this.sortBy = column.prop;
       this.desc = column.order === "ascending";
-      this.getMenus();
+      this.getCategories();
     }
   },
-  created() {},
+  created: function () {
+   
+    },
   mounted() {
-    this.getMenus();
-    this.getRestaurants();
+     this.getCategories();
   }
 };
 </script>
