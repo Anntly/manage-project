@@ -24,11 +24,9 @@ export default {
   name: 'userlogin',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
+      
         callback()
-      }
+      
     }
     const validateCode = (rule, value, callback) => {
       if (this.code.value !== value) {
@@ -41,8 +39,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
       checked: false,
       code: {
@@ -84,6 +82,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store.dispatch('Login', this.loginForm).then(res => {
+            
             this.$router.push({ path: '/dashboard/dashboard' })
           })
         }

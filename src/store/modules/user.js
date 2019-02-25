@@ -46,15 +46,17 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          const data = response
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
+          localStorage.setItem('JWT_TOKEN', response)
+          const userString = decodeURIComponent(escape(window.atob(response.split('.')[1])))
+          const user = JSON.parse(userString)
+          if (user.roles && user.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+            commit('SET_ROLES', user.roles)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          resolve(response)
+          commit('SET_NAME', user.user_name)
+          commit('SET_AVATAR', user.avatar) 
+          resolve(user.roles)
         }).catch(error => {
           reject(error)
         })
@@ -64,6 +66,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
+        console.log('执行退出')
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])

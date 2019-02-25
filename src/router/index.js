@@ -85,34 +85,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
-  // 表格
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/table/complex-table',
-    name: 'table',
-    meta: {
-      title: 'Table',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'complex-table',
-        name: 'complex-table',
-        component: () => import('@/views/table/complex-table'),
-        meta: { title: 'complexTable' }
-      },
-      {
-        path: 'TreeTable',
-        name: 'TreeTable',
-        component: () => import('@/views/table/tree-table/index'),
-        meta: { title: 'treeTable' }
-      }
-
-    ]
-  },
-
   // 菜品管理(基础菜品)
   {
     path: '/dish',
@@ -185,6 +157,34 @@ export default new Router({
   routes: constantRouterMap
 })
 export const asyncRouterMap = [
+
+  // 表格
+  {
+    path: '/table',
+    component: Layout,
+    redirect: '/table/complex-table',
+    name: 'table',
+    meta: {
+      title: 'Table',
+      icon: 'table',
+      roles: ['ROLE_ADMIN']
+    },
+    children: [
+      {
+        path: 'complex-table',
+        name: 'complex-table',
+        component: () => import('@/views/table/complex-table'),
+        meta: { title: 'complexTable' }
+      },
+      {
+        path: 'TreeTable',
+        name: 'TreeTable',
+        component: () => import('@/views/table/tree-table/index'),
+        meta: { title: 'treeTable' }
+      }
+
+    ]
+  },
 
   {
     path: '/error',

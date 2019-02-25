@@ -19,8 +19,8 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-        <img class="user-avatar" src="https://mgbq.github.io/nx-admin-site/home.png">
-          <i class="el-icon-caret-bottom"></i>
+        <img class="user-avatar" :src="avatar">
+          <i class="el-icon-caret-bottom">{{name}}</i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
@@ -44,7 +44,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 import nxBreadcrumb from '@/components/nx-breadcrumb'
 import nxHamburger from '@/components/nx-hamburger'
 import nxHelp from '@/components/nx-help/index'
@@ -69,7 +68,9 @@ export default {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
+      console.log("点击了退出按钮")
       this.$store.dispatch('LogOut').then(() => {
+        console.log("退出结束")
         location.reload() // In order to re-instantiate the vue-router object to avoid bugs
       })
     }

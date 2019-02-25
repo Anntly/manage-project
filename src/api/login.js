@@ -19,9 +19,11 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+export function logout(token) {
+  console.log('发送的' + token)
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/user/seeyou',
+    method: 'post',
+    params: { token }
   })
 }

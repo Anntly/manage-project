@@ -1,21 +1,29 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import {
+  Message,
+  MessageBox
+} from 'element-ui'
 import store from '../store'
-import { getToken } from '@/utils/auth'
+import {
+  getToken
+} from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 5000 // 请求超时时间
+  timeout: 5000, // 请求超时时间
+  withCredentials: true // 请求携带cookie
 })
-
 // 定义成功访问的status
-const successCodes = [200, 201, 202, 203, 204, 205, 206]
+const successCodes = [200, 201, 202, 203, 204, 205, 206, 301, 302]
 
 // request拦截器
 service.interceptors.request.use(config => {
   if (store.getters.token) {
-    config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    // config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    if (localStorage.JWT_TOKEN) { // 如果有jwt_token就加在请求头中
+      config.headers.Authorization = `Bearer ${localStorage.JWT_TOKEN}`
+    }
   }
   return config
 }, error => {
@@ -27,9 +35,9 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
   response => {
-  /**
-  * 返回ResponseEntity 所以判断的是status，不为200就打印出错误信息
-  */
+    /**
+     * 返回ResponseEntity 所以判断的是status，不为200就打印出错误信息
+     */
     console.log(response)
     if (successCodes.indexOf(response.status) === -1) {
       Message({
