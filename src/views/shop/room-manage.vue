@@ -2,21 +2,26 @@
   <section class="app-container">
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-      <el-form :inline="true" :model="filters" @submit.native.prevent>
+      <el-form :inline="true" @submit.native.prevent>
         <el-form-item>
           <el-input v-model="filters.id" placeholder="ID"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="菜名"></el-input>
+          <el-input v-model="filters.name" placeholder="房间名称"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="filters.startPrice" placeholder="起始价"></el-input>
+          <el-select v-model="filters.employeeId" clearable filterable placeholder="请选择要查询的员工">
+            <el-option
+              :loading="loading"
+              v-for="item in employees"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="filters.endPrice" placeholder="最高价"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" v-on:click="getFoods">查询</el-button>
+          <el-button type="primary" v-on:click="getRooms">查询</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -24,10 +29,9 @@
         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
       </el-form>
     </el-col>
-
     <!--列表-->
     <el-table
-      :data="foods"
+      :data="rooms"
       :default-sort="{prop: 'id', order: 'descending'}"
       @sort-change="handleSortChange"
       stripe
@@ -38,34 +42,45 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column sortable="custom" prop="id" label="ID"></el-table-column>
-      <el-table-column prop="name" label="菜品名"></el-table-column>
-      <el-table-column sortable="custom" prop="price" label="菜品价格"></el-table-column>
-      <el-table-column prop="pic" label="图片">
-        <!-- 图片的显示 -->
+      <el-table-column prop="name" label="房间名称"></el-table-column>
+      <el-table-column prop="restaurantId" label="餐厅名称" :formatter="restaurantFormatter"></el-table-column>
+      <el-table-column sortable="custom" prop="star" width="170" label="房间等级">
+        <!-- 评分的显示 -->
         <template slot-scope="scope">
-          <img :src="scope.row.pic" min-width="70" height="70">
+          <el-rate
+            v-model="scope.row.star"
+            disabled
+            show-score
+            text-color="#ff9900"
+            score-template="{value}"
+          ></el-rate>
         </template>
       </el-table-column>
-      <el-table-column prop="cid" label="分类ID" :formatter="arrayFormatter"></el-table-column>
-      <!--<el-table-column prop="cname" label="分类名称" width="120">-->
-      <!--</el-table-column>-->
-      <el-table-column prop="saleable" label="上/下架">
-        <template scope="scope">
-          <el-switch
-            on-text="是"
-            off-text="否"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            v-model="scope.row.saleable"
-            @change="changeSale(scope.$index,scope.row)"
-          ></el-switch>
+      <el-table-column prop="minComsume" label="最低消费"></el-table-column>
+      <el-table-column prop="capacity" label="容纳人数"></el-table-column>
+      <el-table-column v-if="false" prop="employeeId" label="负责人ID"></el-table-column>
+      <el-table-column prop="employeeName" label="负责人"></el-table-column>
+      <el-table-column
+        prop="status"
+        label="房间状态"
+        :filters="[{ text: '使用中', value: false },{ text: '未使用', value: true }]"
+        :filter-method="filterStatus"
+      >
+        <template slot-scope="scope">
+          <el-tag
+            :type="statusCheck(scope.row.status)"
+            disable-transitions
+            v-html="statusFormatter(scope,scope.row.status)"
+          ></el-tag>
         </template>
       </el-table-column>
+      <el-table-column sortable="custom" prop="create_time" label="更新时间" width="120"></el-table-column>
       <el-table-column sortable="custom" prop="update_time" label="更新时间" width="120"></el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="280">
         <template slot-scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+          <el-button type="info" size="small" @click="toDesk(scope.$index, scope.row)">餐桌管理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,46 +103,40 @@
       :close-on-click-modal="false"
     >
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="ID" prop="id">
+        <el-form-item v-if="false" label="ID" prop="id">
           <el-input v-model="editForm.id" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="菜品名称" prop="name">
+        <el-form-item v-if="false" label="restaurantId" prop="id">
+          <el-input v-model="editForm.restaurantId" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="房间名称" prop="name">
           <el-input v-model="editForm.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="价格" prop="price">
-          <el-input-number v-model="editForm.price" :step="0.1" :precision="2" :min="0"></el-input-number>
+        <el-form-item label="房间类型" prop="type">
+          <el-switch active-text="包间" inactive-text="大厅" v-model="editForm.type"></el-switch>
         </el-form-item>
-
-        <el-form-item label="图片" prop="pic">
-          <el-upload
-            action="http://api.anntly.com/api/upload/image"
-            list-type="picture-card"
-            accept="image/*"
-            :limit="imgLimit"
-            :file-list="productImgs"
-            :multiple="isMultiple"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            :on-exceed="handleExceed"
-            :on-error="imgUploadError"
-            :with-credentials='true'
-            :headers="myHeaders"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt>
-          </el-dialog>
+        <el-form-item label="房间星级" prop="star">
+          <el-rate v-model="editForm.star" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"></el-rate>
         </el-form-item>
-        <el-form-item label="分类ID" prop="cid">
-          <el-cascader
-            placeholder="输入分类进行搜索"
-            :options="options"
-            v-model="selectedOptions"
-            filterable
-          ></el-cascader>
+        <el-form-item label="最低消费" prop="minComsume">
+          <el-input-number v-model="editForm.minComsume" :step="5" :precision="2" :min="0"></el-input-number>
+        </el-form-item>
+        <el-form-item label="可容纳" prop="capacity">
+          <el-input-number v-model="editForm.capacity" :step="5" :precision="2" :min="0"></el-input-number>
+        </el-form-item>
+        <el-form-item label="负责人" prop="employeeId">
+          <el-select v-model="editForm.employeeId" clearable filterable placeholder="请选择要查询的员工">
+            <el-option
+              :loading="loading"
+              v-for="item in employees"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间状态" prop="status">
+          <el-switch active-text="未使用" inactive-text="使用中" v-model="editForm.status"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -139,25 +148,18 @@
   </section>
 </template>
 <script>
-import {
-  getFoodListPage,
-  removeFood,
-  batchRemoveFood,
-  editFood,
-  addFood,
-  changeSaleStatus
-} from "@/api/dishTable";
-import { getCas, getIds, getNodes } from "@/api/category";
+import { getRoomListPage, editRoom, addRoom, removeRoom, batchRemoveRoom } from "@/api/restaurant";
+import { getEmployeeListByRid } from "@/api/employee";
 import QS from "qs";
 import { Message, MessageBox } from "element-ui";
 
-var token = `Bearer ${localStorage.JWT_TOKEN}` // 要保证取到
-
 export default {
-  name: "dishManage",
+  name: "RoomManage",
   data() {
     return {
-      myHeaders: {Authorization: token},
+      restaurantId: this.$route.params.id,
+      restaurantName: this.$route.params.restaurantName,
+      employees: [],
       loading: true,
       options: [], // 级联选择器结果
       childrens: [], //所有的子节点
@@ -170,11 +172,11 @@ export default {
       filters: {
         id: null,
         name: "",
-        startPrice: null,
-        endPrice: null
+        restaurantId: this.restaurantId,
+        employeeId: null
       },
       key: "",
-      foods: [],
+      rooms: [],
       total: 0,
       totalPage: 0,
       page: 1,
@@ -186,9 +188,13 @@ export default {
       editForm: {
         id: 0,
         name: "",
-        price: 0.0,
-        pic: "",
-        cid: []
+        restaurantId: this.restaurantId,
+        type: false,
+        star: 5,
+        minComsume: 20,
+        capacity: 30,
+        employeeId: null,
+        status: true
       },
 
       addFormVisible: false, // 新增界面是否显示
@@ -198,16 +204,36 @@ export default {
       productImgs: [], // 文件列表
       isMultiple: true,
       imgLimit: 1, // 上传文件数量
-      dialogStatus: ""
+      dialogStatus: "",
+      selectedTag: {}
     };
   },
   methods: {
-    arrayFormatter(row, column) {
-      // 在childrens中查询cid对应的值
-      var obj = this.childrens.find(function(x) {
-        return x.id === row.cid;
+    toDesk(index, row) {
+      this.$router.push({
+        name: "DeskManage",
+        params: { id: row.id, roomName: row.name, restaurantId: row.restaurantId, restaurantName: this.restaurantName }
       });
-      return obj.name;
+    },
+    statusCheck(status) {
+      if (status) {
+        return "success";
+      } else {
+        return "danger";
+      }
+    },
+    statusFormatter(scope, val) {
+      if (val) {
+        return "未使用";
+      } else {
+        return "使用中";
+      }
+    },
+    filterStatus(value, row) {
+      return row.status === value;
+    },
+    restaurantFormatter(row, column) {
+      return this.restaurantName;
     },
     handleRemove(file, fileList) {
       //移除图片
@@ -255,34 +281,24 @@ export default {
     },
     handleCurrentChange(val) {
       this.page = val;
-      this.getFoods();
+      this.getRooms();
     },
     // 处理filters的数据
     checkObj(para) {
-      if (
-        para.key.startPrice < 0 ||
-        para.key.endPrice < 0 ||
-        para.key.startPrice > para.key.endPrice
-      ) {
-        Message({
-          message: "请输入合法参数",
-          type: "error",
-          duration: 5 * 1000
-        });
-        return;
-      }
+      this.filters.restaurantId = this.restaurantId;
       para.key = JSON.stringify(this.filters);
-      getFoodListPage(para)
+      getRoomListPage(para)
         .then(res => {
           this.total = res.total;
           this.totalPage = res.totalPage;
-          this.foods = res.items;
-          this.loading = false
+          this.rooms = res.items;
+          this.loading = false;
+          this.filters = {};
         })
         .catch();
     },
     // 获取用户列表
-    getFoods() {
+    getRooms() {
       const para = {
         key: this.filters,
         page: this.page,
@@ -291,24 +307,18 @@ export default {
       };
       this.checkObj(para);
     },
-    getOptions() {
-      getCas().then(res => (this.options = res));
-    },
-    getChildrens() {
-      getNodes().then(res => (this.childrens = res));
-    },
     // 删除
     handleDel(index, row) {
       this.$confirm("确认删除该记录吗?", "提示", {
         type: "warning"
       })
         .then(() => {
-          removeFood(row.id).then(res => {
+          removeRoom(row.id).then(res => {
             this.$message({
               message: "删除成功",
               type: "success"
             });
-            this.getFoods();
+            this.getRooms();
           });
         })
         .catch(() => {});
@@ -317,11 +327,6 @@ export default {
     handleEdit(index, row) {
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
-      // 获取需要修改的分类的cid
-      const id = row.cid;
-      getIds(id).then(res => {
-        this.selectedOptions = res;
-      });
       this.editForm = Object.assign({}, row);
     },
     // 显示新增界面
@@ -331,9 +336,13 @@ export default {
       this.editForm = {
         id: 0,
         name: "",
-        price: 0.0,
-        pic: "",
-        cid: []
+        restaurantId: this.restaurantId,
+        type: false,
+        star: 5,
+        minComsume: 20,
+        capacity: 30,
+        employeeId: null,
+        status: true
       };
     },
     // 编辑
@@ -342,19 +351,8 @@ export default {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {})
             .then(() => {
-              // const para = Object.assign({}, this.editForm);
-              // para.birth =
-              //   !para.birth || para.birth === ''
-              //     ? ''
-              //     : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
-              const para = {
-                id: this.editForm.id,
-                name: this.editForm.name,
-                price: this.editForm.price,
-                pic: this.editForm.pic,
-                cid: this.selectedOptions[this.selectedOptions.length - 1]
-              };
-              editFood(para).then(res => {
+              const para = Object.assign({}, this.editForm);
+              editRoom(para).then(res => {
                 this.$message({
                   message: "提交成功",
                   type: "success"
@@ -362,7 +360,7 @@ export default {
                 this.$refs["editForm"].resetFields();
                 this.dialogFormVisible = false;
                 this.selectedOptions = [];
-                this.getFoods();
+                this.getRooms();
               });
             })
             .catch(e => {
@@ -378,23 +376,16 @@ export default {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {})
             .then(() => {
-              // const para = Object.assign({}, this.editForm);
-              const para = {
-                id: this.editForm.id,
-                name: this.editForm.name,
-                price: this.editForm.price,
-                pic: this.editForm.pic,
-                cid: this.selectedOptions[this.selectedOptions.length - 1]
-              };
+              const para = Object.assign({}, this.editForm);
               console.log(para);
-              addFood(para).then(res => {
+              addRoom(para).then(res => {
                 this.$message({
                   message: "提交成功",
                   type: "success"
                 });
                 this.$refs["editForm"].resetFields();
                 this.dialogFormVisible = false;
-                this.getFoods();
+                this.getRooms();
               });
             })
             .catch(e => {
@@ -408,44 +399,52 @@ export default {
     selsChange(sels) {
       this.sels = sels;
     },
+    // 获取用户列表
+    getEmployeeList(restaurantId) {
+      getEmployeeListByRid(restaurantId).then(res => {
+        this.employees = res;
+      });
+    },
     // 批量删除
     batchRemove() {
       var ids = this.sels.map(item => item.id).toString();
-      this.$confirm("确认删除选中记录吗？", "提示", {
+      this.$confirm("确认删除选中记录吗(会删除该分类下所有的菜品)？", "提示", {
         type: "warning"
       })
         .then(() => {
           const para = { ids: ids };
-          batchRemoveFood(para).then(res => {
+          batchRemoveRoom(para).then(res => {
             this.$message({
               message: "删除成功",
               type: "success"
             });
-            this.getFoods();
+            this.getRooms();
           });
         })
         .catch(() => {});
     },
-    // 菜品上下架
-    changeSale(index, row) {
-      changeSaleStatus(row.id);
-    },
     // 排序
     handleSortChange(column) {
       this.sortBy = column.prop;
-      this.desc = column.order == "ascending";
-      this.getFoods();
+      this.desc = column.order === "ascending";
+      this.getRooms();
     }
   },
-  created() {
-    
-  },
+  created: function() {},
   mounted() {
-    this.getOptions();
-    this.getChildrens();
-    this.getFoods();
+    this.getRooms();
+    this.getEmployeeList(this.restaurantId);
   }
 };
 </script>
 <style scoped>
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>

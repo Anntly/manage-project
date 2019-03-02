@@ -13,6 +13,17 @@ export function getMenuPage(params) {
     params: params
   })
 }
+
+export function getMenuNodes(restaurantId) {
+  return request({
+    url: '/shop/menu/re',
+    method: 'get',
+    params: {
+      restaurantId
+    }
+  })
+}
+
 export function getMenuCategoryPage(params) {
   return request({
     url: '/shop/cat/page',

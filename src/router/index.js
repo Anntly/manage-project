@@ -35,10 +35,22 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/dashboard/dashboard'
   },
-  { path: '/login', component: () => import('@/views/login'), name: '登录NxAdmin', hidden: true },
-  { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
-  { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
-
+  {
+    path: '/login',
+    component: () => import('@/views/login'),
+    name: '登录NxAdmin',
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/errorPage/404'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/errorPage/401'),
+    hidden: true
+  },
   // 报表
   {
     path: '/dashboard',
@@ -53,7 +65,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
   // 表单
   {
     path: '/form',
@@ -64,25 +75,30 @@ export const constantRouterMap = [
       title: 'form',
       icon: 'form'
     },
-    children: [
-      {
-        path: 'BaseForm',
-        name: 'BaseForm',
-        component: () => import('@/views/form/BaseForm'),
-        meta: { title: 'BaseForm' }
-      },
-      {
-        path: 'VueEditor',
-        name: 'VueEditor',
-        component: () => import('@/views/form/VueEditor'),
-        meta: { title: 'VueEditor' }
-      },
-      {
-        path: 'Upload',
-        name: 'Upload',
-        component: () => import('@/views/form/Upload'),
-        meta: { title: 'Upload' }
+    children: [{
+      path: 'BaseForm',
+      name: 'BaseForm',
+      component: () => import('@/views/form/BaseForm'),
+      meta: {
+        title: 'BaseForm'
       }
+    },
+    {
+      path: 'VueEditor',
+      name: 'VueEditor',
+      component: () => import('@/views/form/VueEditor'),
+      meta: {
+        title: 'VueEditor'
+      }
+    },
+    {
+      path: 'Upload',
+      name: 'Upload',
+      component: () => import('@/views/form/Upload'),
+      meta: {
+        title: 'Upload'
+      }
+    }
     ]
   },
   // 菜品管理(基础菜品)
@@ -95,19 +111,24 @@ export const constantRouterMap = [
       title: 'Dish',
       icon: 'caipin'
     },
-    children: [
-      {
-        path: 'dish-manage',
-        component: () => import('@/views/dish/dish-manage'),
-        name: 'DishManage',
-        meta: { title: 'DishManage', icon: 'manage' }
-      },
-      {
-        path: 'category-manage',
-        component: () => import('@/views/dish/category-manage'),
-        name: 'CategoryManage',
-        meta: { title: 'CategoryManage', icon: 'fenlei' }
+    children: [{
+      path: 'dish-manage',
+      component: () => import('@/views/dish/dish-manage'),
+      name: 'DishManage',
+      meta: {
+        title: 'DishManage',
+        icon: 'manage'
       }
+    },
+    {
+      path: 'category-manage',
+      component: () => import('@/views/dish/category-manage'),
+      name: 'CategoryManage',
+      meta: {
+        title: 'CategoryManage',
+        icon: 'fenlei'
+      }
+    }
     ]
   },
   // 餐厅管理(餐厅管理 菜单管理 菜单菜品管理)
@@ -120,44 +141,109 @@ export const constantRouterMap = [
       title: 'Shop',
       icon: 'canting_1'
     },
-    children: [
-      {
-        path: 'restaurant-manage',
-        component: () => import('@/views/shop/restaurant-manage'),
-        name: 'RestaurantManage',
-        meta: { title: 'RestaurantManage', icon: 'canting' }
-      },
-      {
-        path: 'menu-manage',
-        component: () => import('@/views/shop/menu-manage'),
-        name: 'MenuManage',
-        meta: { title: 'MenuManage', icon: 'navicon-ctgl' }
-      },
-      {
-        path: 'menu-cat-manage',
-        component: () => import('@/views/shop/menu-cat-manage'),
-        name: 'MenuCatManage',
-        meta: { title: 'MenuCatManage', icon: 'fenlei' },
-        hidden: true
-      },
-      {
-        path: 'menu-food-manage',
-        component: () => import('@/views/shop/menu-food-manage'),
-        name: 'MenuFoodManage',
-        meta: { title: 'MenuFoodManage', icon: 'navicon-cprkd' },
-        hidden: true
+    children: [{
+      path: 'restaurant-manage',
+      component: () => import('@/views/shop/restaurant-manage'),
+      name: 'RestaurantManage',
+      meta: {
+        title: 'RestaurantManage',
+        icon: 'canting'
       }
+    },
+    {
+      path: 'menu-manage',
+      component: () => import('@/views/shop/menu-manage'),
+      name: 'MenuManage',
+      meta: {
+        title: 'MenuManage',
+        icon: 'navicon-ctgl'
+      }
+    },
+    {
+      path: 'menu-cat-manage',
+      component: () => import('@/views/shop/menu-cat-manage'),
+      name: 'MenuCatManage',
+      meta: {
+        title: 'MenuCatManage',
+        icon: 'fenlei'
+      },
+      hidden: true
+    },
+    {
+      path: 'menu-food-manage',
+      component: () => import('@/views/shop/menu-food-manage'),
+      name: 'MenuFoodManage',
+      meta: {
+        title: 'MenuFoodManage',
+        icon: 'navicon-cprkd'
+      },
+      hidden: true
+    },
+    {
+      path: 'room-manage',
+      component: () => import('@/views/shop/room-manage'),
+      name: 'RoomManage',
+      meta: {
+        title: 'RoomManage',
+        icon: 'fangjian'
+      },
+      hidden: true
+    },
+    {
+      path: 'desk-manage',
+      component: () => import('@/views/shop/desk-manage'),
+      name: 'DeskManage',
+      meta: {
+        title: 'DeskManage',
+        icon: 'fanzhuo'
+      },
+      hidden: true
+    }
+
     ]
+  },
+  // 员工相关
+  {
+    path: '/employee',
+    component: Layout,
+    redirect: '/employee/employee-manage',
+    children: [{
+      path: 'employee-manage',
+      name: 'employee',
+      component: () => import('@/views/employee/employee-manage'),
+      meta: { title: 'EmployeeManage', icon: 'yuangong' }
+    }]
+
   }
+  // {
+  //   path: '/employee',
+  //   component: Layout,
+  //   redirect: '/employee/employee-manage',
+  //   name: 'employee',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: 'employee',
+  //     icon: 'yuangong'
+  //   },
+  //   children: [{
+  //     path: 'employee-manage',
+  //     component: () => import('@/views/employee/employee-manage'),
+  //     name: 'EmployeeManage',
+  //     meta: {
+  //       title: 'EmployeeManage'
+  //     }
+  //   }]
+  // },
 ]
 
 export default new Router({
   // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: constantRouterMap
 })
 export const asyncRouterMap = [
-
   // 表格
   {
     path: '/table',
@@ -169,23 +255,25 @@ export const asyncRouterMap = [
       icon: 'table',
       roles: ['ROLE_ADMIN']
     },
-    children: [
-      {
-        path: 'complex-table',
-        name: 'complex-table',
-        component: () => import('@/views/table/complex-table'),
-        meta: { title: 'complexTable' }
-      },
-      {
-        path: 'TreeTable',
-        name: 'TreeTable',
-        component: () => import('@/views/table/tree-table/index'),
-        meta: { title: 'treeTable' }
+    children: [{
+      path: 'complex-table',
+      name: 'complex-table',
+      component: () => import('@/views/table/complex-table'),
+      meta: {
+        title: 'complexTable'
       }
+    },
+    {
+      path: 'TreeTable',
+      name: 'TreeTable',
+      component: () => import('@/views/table/tree-table/index'),
+      meta: {
+        title: 'treeTable'
+      }
+    }
 
     ]
   },
-
   {
     path: '/error',
     component: Layout,
@@ -195,9 +283,29 @@ export const asyncRouterMap = [
       title: 'errorPages',
       icon: '404'
     },
-    children: [
-      { path: '401', component: () => import('@/views/errorPage/401'), name: 'page401', meta: { title: 'page401', noCache: true }},
-      { path: '404', component: () => import('@/views/errorPage/404'), name: 'page404', meta: { title: 'page404', noCache: true }}
+    children: [{
+      path: '401',
+      component: () => import('@/views/errorPage/401'),
+      name: 'page401',
+      meta: {
+        title: 'page401',
+        noCache: true
+      }
+    },
+    {
+      path: '404',
+      component: () => import('@/views/errorPage/404'),
+      name: 'page404',
+      meta: {
+        title: 'page404',
+        noCache: true
+      }
+    }
     ]
   },
-  { path: '*', redirect: '/404', hidden: true }]
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
+]

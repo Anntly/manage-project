@@ -97,10 +97,11 @@
       :filters="[{ text: '休息中', value: 2 },{ text: '正常营业', value: 1 }, { text: '封禁', value: 0 }, { text: '审核中', value: 3 }]"
       :filter-method="filterStatus"
       ></el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="280">
         <template slot-scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+           <el-button type="info" size="small" @click="toRoom(scope.$index, scope.row)">房间管理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -195,6 +196,8 @@
             :before-upload="beforeAvatarUpload"
             :on-exceed="handleExceed"
             :on-error="imgUploadError"
+            :headers="myHeaders"
+            :with-credentials='true'
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -218,6 +221,8 @@
             :before-upload="beforeAvatarUpload"
             :on-exceed="handleExceed"
             :on-error="imgUploadError"
+            :headers="myHeaders"
+            :with-credentials='true'
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -239,6 +244,8 @@
             :before-upload="beforeAvatarUpload"
             :on-exceed="handleExceed"
             :on-error="imgUploadError"
+            :headers="myHeaders"
+            :with-credentials='true'
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -270,10 +277,13 @@ import { getArea } from "@/api/area";
 import QS from "qs";
 import { Message, MessageBox } from "element-ui";
 
+var token = `Bearer ${localStorage.JWT_TOKEN}` // 要保证取到
+
 export default {
   name: "RestaurantManage",
   data() {
     return {
+      myHeaders: {Authorization: token},
       active: 0,
       loading: true,
       options: [], // 级联选择器结果
@@ -331,6 +341,9 @@ export default {
     };
   },
   methods: {
+    toRoom(index,row){
+      this.$router.push({name: 'RoomManage',params:{ id:row.id,restaurantName:row.name}});
+    },
     next() {
         this.active ++;
       },
