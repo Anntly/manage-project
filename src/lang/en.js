@@ -34,6 +34,7 @@ export default {
     employee: 'employeeManage',
     EmployeeManage: 'EmployeeManage',
     RoomManage: 'RoomManage',
+    CouponManage: 'CouponManage',
     Icons: 'Icons',
     treeChart: 'treeChart',
     gaugeChart: 'gaugeChart',

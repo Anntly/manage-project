@@ -213,27 +213,19 @@ export const constantRouterMap = [
       component: () => import('@/views/employee/employee-manage'),
       meta: { title: 'EmployeeManage', icon: 'yuangong' }
     }]
-
+  },
+  // 优惠券相关
+  {
+    path: '/coupon',
+    component: Layout,
+    redirect: '/coupon/coupon-manage',
+    children: [{
+      path: 'coupon-manage',
+      name: 'coupon',
+      component: () => import('@/views/coupon/coupon-manage'),
+      meta: { title: 'CouponManage', icon: 'youhuiquan' }
+    }]
   }
-  // {
-  //   path: '/employee',
-  //   component: Layout,
-  //   redirect: '/employee/employee-manage',
-  //   name: 'employee',
-  //   alwaysShow: true,
-  //   meta: {
-  //     title: 'employee',
-  //     icon: 'yuangong'
-  //   },
-  //   children: [{
-  //     path: 'employee-manage',
-  //     component: () => import('@/views/employee/employee-manage'),
-  //     name: 'EmployeeManage',
-  //     meta: {
-  //       title: 'EmployeeManage'
-  //     }
-  //   }]
-  // },
 ]
 
 export default new Router({

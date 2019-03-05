@@ -51,6 +51,7 @@ export default {
     employee: '员工管理',
     EmployeeManage: '员工管理',
     RoomManage: '房间管理',
+    CouponManage: '优惠券管理',
     VueEditor: '文本编辑',
     Upload: '文件上传',
     Components: '组件',
