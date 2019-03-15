@@ -77,6 +77,15 @@ export function addMenuFood(params) {
     params: params
   })
 }
+export function getMenuFoodNodes(mCid) {
+  return request({
+    url: '/shop/mfood/nodes',
+    method: 'get',
+    params: {
+      mCid
+    }
+  })
+}
 export function removeMenu(params) {
   return request({
     url: '/shop/menu/' + params,
@@ -135,5 +144,24 @@ export function batchRemoveMenuFoodCat(params) {
     url: '/shop/cat/ids',
     method: 'delete',
     params: params
+  })
+}
+export function getOrderNodes(menuId) {
+  return request({
+    url: '/shop/mfood/orders',
+    method: 'get',
+    params: {
+      menuId
+    }
+  })
+}
+
+export function getRecommendedFoods(menuId) {
+  return request({
+    url: '/shop/mfood/recommended',
+    method: 'get',
+    params: {
+      menuId
+    }
   })
 }

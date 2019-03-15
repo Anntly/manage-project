@@ -225,6 +225,36 @@ export const constantRouterMap = [
       component: () => import('@/views/coupon/coupon-manage'),
       meta: { title: 'CouponManage', icon: 'youhuiquan' }
     }]
+  },
+  // 订单相关
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/order-manage',
+    name: 'order',
+    meta: {
+      title: 'order',
+      icon: 'dingdan'
+    },
+    children: [{
+      path: 'order-manage',
+      name: 'OrderManage',
+      component: () => import('@/views/order/order-manage'),
+      meta: { title: 'OrderManage', icon: 'dingdan' }
+    },
+    {
+      path: 'order-detail',
+      name: 'OrderDetail',
+      component: () => import('@/views/order/order-detail'),
+      meta: { title: 'OrderDetail', icon: 'dingdan' },
+      hidden: true
+    },
+    {
+      path: 'place-order',
+      name: 'PlaceOrder',
+      component: () => import('@/views/order/place-order'),
+      meta: { title: 'PlaceOrder', icon: 'xiadan' }
+    }]
   }
 ]
 

@@ -22,6 +22,7 @@
           <el-button type="primary" @click="handleAdd">新增</el-button>
         </el-form-item>
         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+        <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">接单模式</el-button>
       </el-form>
     </el-col>
     <!-- <el-button type="success" round @click="handleBack()">返回</el-button> -->

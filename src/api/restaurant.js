@@ -75,6 +75,15 @@ export function getDeskListPage(params) {
     params: params
   })
 }
+export function getDeskNodes(restaurantId) {
+  return request({
+    url: '/shop/desk/nodes',
+    method: 'get',
+    params: {
+      restaurantId
+    }
+  })
+}
 export function editDesk(params) {
   return request({
     url: '/shop/desk',
