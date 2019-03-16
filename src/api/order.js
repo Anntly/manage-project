@@ -78,3 +78,39 @@ export function editOrderDetail(params) {
     params: params
   })
 }
+export function getOrderReport(restaurantId) {
+  return request({
+    url: '/order/restaurant/report/order',
+    method: 'get',
+    params: {
+      restaurantId
+    }
+  })
+}
+export function getOrderExpend(restaurantId) {
+  return request({
+    url: '/order/restaurant/report/expend',
+    method: 'get',
+    params: {
+      restaurantId
+    }
+  })
+}
+export function getOrderPayType(restaurantId) {
+  return request({
+    url: '/order/restaurant/report/paytype',
+    method: 'get',
+    params: {
+      restaurantId
+    }
+  })
+}
+export function getFoodReportNode(restaurantId) {
+  return request({
+    url: '/order/detail/report/food',
+    method: 'get',
+    params: {
+      restaurantId
+    }
+  })
+}

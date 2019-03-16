@@ -33,11 +33,15 @@ import '@/icons' // icon
 
 import '@/permission' // permission control
 
+import echarts from 'echarts'
+
 import * as filters from './filters' // global filters
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+
+Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI, { locale })
 iconfontVersion.forEach(ele => {

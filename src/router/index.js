@@ -65,42 +65,6 @@ export const constantRouterMap = [
       }
     ]
   },
-  // 表单
-  {
-    path: '/form',
-    component: Layout,
-    redirect: '/table/BaseForm',
-    name: 'form',
-    meta: {
-      title: 'form',
-      icon: 'form'
-    },
-    children: [{
-      path: 'BaseForm',
-      name: 'BaseForm',
-      component: () => import('@/views/form/BaseForm'),
-      meta: {
-        title: 'BaseForm'
-      }
-    },
-    {
-      path: 'VueEditor',
-      name: 'VueEditor',
-      component: () => import('@/views/form/VueEditor'),
-      meta: {
-        title: 'VueEditor'
-      }
-    },
-    {
-      path: 'Upload',
-      name: 'Upload',
-      component: () => import('@/views/form/Upload'),
-      meta: {
-        title: 'Upload'
-      }
-    }
-    ]
-  },
   // 菜品管理(基础菜品)
   {
     path: '/dish',
@@ -255,6 +219,65 @@ export const constantRouterMap = [
       component: () => import('@/views/order/place-order'),
       meta: { title: 'PlaceOrder', icon: 'xiadan' }
     }]
+  },
+  // 报表相关
+  {
+    path: '/charts',
+    component: Layout,
+    redirect: '/charts/order-report',
+    name: 'report',
+    meta: {
+      title: 'report',
+      icon: 'report'
+    },
+    children: [{
+      path: 'order-report',
+      name: 'OrderReport',
+      component: () => import('@/views/charts/order-report'),
+      meta: { title: 'OrderReport', icon: 'report' }
+    },
+    {
+      path: 'dish-report',
+      name: 'DishReport',
+      component: () => import('@/views/charts/dish-report'),
+      meta: { title: 'DishReport', icon: 'report' }
+    }]
+  },
+  // 用户相关
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/admin-manage',
+    name: 'user',
+    meta: {
+      title: 'user',
+      icon: 'user'
+    },
+    children: [{
+      path: 'admin-manage',
+      name: 'AdminManage',
+      component: () => import('@/views/user/admin-manage'),
+      meta: { title: 'AdminManage', icon: 'admin' }
+    },
+    {
+      path: 'user-manage',
+      name: 'UserManage',
+      component: () => import('@/views/user/user-manage'),
+      meta: { title: 'UserManage', icon: 'user' }
+    },
+    {
+      path: 'user-info',
+      name: 'UserInfo',
+      component: () => import('@/views/user/user-info'),
+      meta: { title: 'UserInfo', icon: 'userInfo' }
+    }]
+  },
+  // 锁屏
+  {
+    path: '/lock',
+    hidden: true,
+    name: '锁屏页',
+    component: () => import('@/views/common/lock')
   }
 ]
 
@@ -266,41 +289,12 @@ export default new Router({
   routes: constantRouterMap
 })
 export const asyncRouterMap = [
-  // 表格
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/table/complex-table',
-    name: 'table',
-    meta: {
-      title: 'Table',
-      icon: 'table',
-      roles: ['ROLE_ADMIN']
-    },
-    children: [{
-      path: 'complex-table',
-      name: 'complex-table',
-      component: () => import('@/views/table/complex-table'),
-      meta: {
-        title: 'complexTable'
-      }
-    },
-    {
-      path: 'TreeTable',
-      name: 'TreeTable',
-      component: () => import('@/views/table/tree-table/index'),
-      meta: {
-        title: 'treeTable'
-      }
-    }
-
-    ]
-  },
   {
     path: '/error',
     component: Layout,
     redirect: 'noredirect',
     name: 'errorPages',
+    hidden: true,
     meta: {
       title: 'errorPages',
       icon: '404'

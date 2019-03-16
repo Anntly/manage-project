@@ -39,6 +39,7 @@
     "better-scroll": "^1.12.4",
     "circular-json": "^0.5.9",
     "countup.js": "^1.9.3",
+    "echarts": "^4.1.0",
     "element-ui": "2.3.4",
     "font-awesome": "^4.7.0",
     "highlight.js": "^9.12.0",
