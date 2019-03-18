@@ -1,13 +1,16 @@
 <template>
   <el-menu class="navbar" mode="horizontal">
-    <nx-hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></nx-hamburger>
+    <nx-hamburger
+      class="hamburger-container"
+      :toggleClick="toggleSideBar"
+      :isActive="sidebar.opened"
+    ></nx-hamburger>
 
     <nx-breadcrumb class="breadcrumb-container"></nx-breadcrumb>
 
     <div class="right-menu">
-
       <nx-top-lock style="cursor:pointer" class="nx-help"></nx-top-lock>
-     <el-tooltip effect="dark" content="全屏" placement="bottom">
+      <el-tooltip effect="dark" content="全屏" placement="bottom">
         <nx-full-screen class="screenfull right-menu-item"></nx-full-screen>
       </el-tooltip>
 
@@ -18,23 +21,21 @@
         <!-- <theme-picker class="theme-switch right-menu-item"></theme-picker> -->
         <nx-skin class="theme-switch right-menu-item"></nx-skin>
       </el-tooltip>
-      
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar">
+          <img class="user-avatar" :src="avatar">
           <i class="el-icon-caret-bottom">{{name}}</i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
-            <el-dropdown-item>
-              home
-            </el-dropdown-item>
+            <el-dropdown-item>home</el-dropdown-item>
           </router-link>
-          <router-link to="/UserInfo">
-            <el-dropdown-item>
-              个人信息
-            </el-dropdown-item>
+          <router-link :to="{name: 'UserInfo'}">
+            <el-dropdown-item>个人信息</el-dropdown-item>
+          </router-link>
+          <router-link :to="{name: 'ChangePass'}">
+            <el-dropdown-item>修改密码</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
             <span @click="logout" style="display:block;">退出</span>
@@ -46,18 +47,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import nxBreadcrumb from '@/components/nx-breadcrumb'
-import nxHamburger from '@/components/nx-hamburger'
-import nxHelp from '@/components/nx-help/index'
-import nxSkin from '@/components/nx-skin/index'
-import nxFullScreen from '@/components/nx-full-screen/index'
-import nxTopLock from '@/components/nx-top-lock'
-import nxLangSelect from '@/components/nx-lang-select/index'
+import { mapGetters } from "vuex";
+import nxBreadcrumb from "@/components/nx-breadcrumb";
+import nxHamburger from "@/components/nx-hamburger";
+import nxHelp from "@/components/nx-help/index";
+import nxSkin from "@/components/nx-skin/index";
+import nxFullScreen from "@/components/nx-full-screen/index";
+import nxTopLock from "@/components/nx-top-lock";
+import nxLangSelect from "@/components/nx-lang-select/index";
 
-import nxGithub from '@/components/nx-github/index'
+import nxGithub from "@/components/nx-github/index";
 export default {
-  name: 'navBar',
+  name: "navBar",
   components: {
     nxBreadcrumb,
     nxHamburger,
@@ -69,21 +70,21 @@ export default {
     nxTopLock
   },
   computed: {
-    ...mapGetters(['sidebar', 'name', 'avatar'])
+    ...mapGetters(["sidebar", "name", "avatar"])
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('ToggleSideBar')
+      this.$store.dispatch("ToggleSideBar");
     },
     logout() {
-      console.log("点击了退出按钮")
-      this.$store.dispatch('LogOut').then(() => {
-        console.log("退出结束")
-        location.reload() // In order to re-instantiate the vue-router object to avoid bugs
-      })
+      console.log("点击了退出按钮");
+      this.$store.dispatch("LogOut").then(() => {
+        console.log("退出结束");
+        location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
+      });
     }
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

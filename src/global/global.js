@@ -12,18 +12,23 @@ export const global = {
       case 'Blue':
       /* eslint-disable */
         $('.navbar').css('background-color', '#409eff')
+        $('.menu-wrapper').css('background-color', '#409eff')
         break
       case 'Green':
         $('.navbar').css('background-color', '#009a61')
+        $('.menu-wrapper').css('background-color', '#009a61')
         break
       case 'Red':
         $('.navbar').css('background-color', '#f44336')
+        $('.menu-wrapper').css('background-color', '#f44336')
         break
       case 'Purple':
         $('.navbar').css('background-color', '#7B7DE5')
+        $('.menu-wrapper').css('background-color', '#f44336')
         break
       default:
         $('.navbar').css('background-color', '#21baa9')
+        $('.menu-wrapper').css('background-color', '#f44336')
         break
     }
     console.log('切换主题颜色值：',themeValue,that.staticPath,JSON.stringify(themeArray) );

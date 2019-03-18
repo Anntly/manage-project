@@ -248,16 +248,17 @@ export const constantRouterMap = [
     path: '/user',
     component: Layout,
     redirect: '/user/admin-manage',
-    name: 'user',
+    name: 'User',
     meta: {
-      title: 'user',
+      title: 'User',
       icon: 'user'
     },
     children: [{
       path: 'admin-manage',
       name: 'AdminManage',
       component: () => import('@/views/user/admin-manage'),
-      meta: { title: 'AdminManage', icon: 'admin' }
+      meta: { title: 'AdminManage', icon: 'admin' },
+      hidden: true
     },
     {
       path: 'user-manage',
@@ -269,7 +270,21 @@ export const constantRouterMap = [
       path: 'user-info',
       name: 'UserInfo',
       component: () => import('@/views/user/user-info'),
-      meta: { title: 'UserInfo', icon: 'userInfo' }
+      meta: { title: 'UserInfo', icon: 'userInfo' },
+      hidden: true
+    },
+    {
+      path: 'role-permission',
+      name: 'RolePermission',
+      component: () => import('@/views/user/role-permission'),
+      meta: { title: 'RolePermission', icon: 'role' }
+    },
+    {
+      path: 'change-pass',
+      name: 'ChangePass',
+      component: () => import('@/views/user/change-pass'),
+      meta: { title: 'ChangePass', icon: 'pass' },
+      hidden: true
     }]
   },
   // 锁屏
