@@ -135,11 +135,11 @@
           ></el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="restaurantId" label="餐厅Id"></el-table-column>
+      <el-table-column v-if="false" prop="restaurantId" label="餐厅Id"></el-table-column>
       <el-table-column prop="restaurantName" label="餐厅名称"></el-table-column>
       <el-table-column prop="userId" label="用户Id"></el-table-column>
       <el-table-column prop="userName" label="用户名称"></el-table-column>
-      <el-table-column prop="deskId" label="餐桌Id"></el-table-column>
+      <el-table-column v-if="false" prop="deskId" label="餐桌Id"></el-table-column>
       <el-table-column prop="deskName" label="餐桌名称"></el-table-column>
       <el-table-column prop="note" label="备注"></el-table-column>
       <el-table-column
@@ -184,11 +184,17 @@
           ></el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="350">
+      <el-table-column label="操作" width="420">
         <template slot-scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
           <el-button type="info" size="small" @click="toDetail(scope.$index, scope.row)">订单详情</el-button>
+          <el-button
+            :disabled="isTake(scope.row.status)"
+            type="danger"
+            size="small"
+            @click="handleTakeOrder(scope.$index, scope.row)"
+          >接单</el-button>
           <el-button
             :disabled="isPay(scope.$index, scope.row)"
             type="primary"
@@ -311,13 +317,18 @@
   </section>
 </template>
 <script>
-import { getRestaurantNodes, batchRemoveMenu, addMenu } from "@/api/dishMenu";
+import {
+  getRestaurantNodes,
+  batchRemoveMenu,
+  addMenu
+} from "@/api/dishMenu";
 import {
   getOrderPage,
   removeOrder,
   editOrder,
   settlement,
-  haspay
+  haspay,
+  takeOrder
 } from "@/api/order";
 import QS from "qs";
 import { Message, MessageBox } from "element-ui";
@@ -406,10 +417,11 @@ export default {
         this.iconClass = "cebianlanshouhui";
       }
     },
-    initWebSocket: function() {
+    initWebSocket: function(restaurantId) {
       // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
       this.websock = new WebSocket(
-        "ws://localhost:8087/websocket/" + this.restaurantId
+        "ws://localhost:8087/websocket/" + restaurantId
+        // "ws://api.anntly.com/api/order/websocket/" + restaurantId
       );
       this.websock.onopen = this.websocketonopen;
       this.websock.onerror = this.websocketonerror;
@@ -423,10 +435,15 @@ export default {
       console.log("WebSocket连接发生错误");
     },
     websocketonmessage: function(e) {
-      var da = JSON.parse(e.data);
-      console.log(da);
-      Message.success(da);
-      this.message = da;
+      console.log("接收到消息");
+      // var da = JSON.parse(e.data);
+      console.log(e.data);
+      this.$notify.info({
+        title: "消息",
+        message: e.data
+      });
+      this.getUnTakeOrders();
+      this.message = e.data;
     },
     websocketclose: function(e) {
       console.log("connection closed (" + e.code + ")");
@@ -439,8 +456,23 @@ export default {
       //前天的时间
       var day2 = new Date();
       day2.setDate(day2.getDate() - 2);
+      this.filters.restaurantId = this.restaurantId;
       this.filters.payStatus = false;
       //this.filters.status = 3;
+      this.filters.beginTime = day1;
+      this.filters.endTime = day2;
+      this.getOrders();
+    },
+    getUnTakeOrders() {
+      //昨天的时间
+      var day1 = new Date();
+      day1.setDate(day1.getDate() - 1);
+      //前天的时间
+      var day2 = new Date();
+      day2.setDate(day2.getDate() - 2);
+      this.filters.restaurantId = this.restaurantId;
+      this.filters.payStatus = false;
+      this.filters.status = 1;
       this.filters.beginTime = day1;
       this.filters.endTime = day2;
       this.getOrders();
@@ -473,7 +505,30 @@ export default {
       }).then(action => {
         haspay(id).then(this.getUnPayOrders());
         Message.success("订单完成");
+        this.getUnPayOrders()
       });
+    },
+    handleTakeOrder(index, row) {
+      this.$confirm("此操作将会接受订单, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          takeOrder(row.id).then(res => {
+            this.$message({
+              type: "success",
+              message: "接单成功"
+            });
+            this.getUnTakeOrders()
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消接单"
+          });
+        });
     },
     settlementMoney(index, row) {
       settlement(row.id)
@@ -482,7 +537,9 @@ export default {
         })
         .catch();
     },
-
+    isTake(status) {
+      return status != 1;
+    },
     isPay(index, row) {
       return row.payStatus;
     },
@@ -493,9 +550,10 @@ export default {
       });
     },
     selectResturant(restaurantId) {
+      this.restaurantId = restaurantId;
       this.filters.restaurantId = restaurantId;
       // 开启websocket
-      this.initWebSocket();
+      this.initWebSocket(restaurantId);
       this.getOrders();
     },
     filterPayType(value, row) {

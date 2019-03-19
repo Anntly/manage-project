@@ -36,12 +36,16 @@ import '@/permission' // permission control
 import echarts from 'echarts'
 
 import * as filters from './filters' // global filters
+
+import SlideVerify from 'vue-monoplasty-slide-verify';
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
 Vue.prototype.$echarts = echarts
+
+Vue.use(SlideVerify)
 
 Vue.use(ElementUI, { locale })
 iconfontVersion.forEach(ele => {

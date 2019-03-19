@@ -55,236 +55,18 @@ export const constantRouterMap = [
   {
     path: '/dashboard',
     component: Layout,
-    meta: { title: 'dashboard', icon: 'dashboard' },
-    children: [
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: () => import('@/views/dashboard/dashboard'),
-        meta: { title: 'dashboard', icon: 'dashboard' }
-      }
-    ]
-  },
-  // 菜品管理(基础菜品)
-  {
-    path: '/dish',
-    component: Layout,
-    redirect: '/dish/dish-manage',
-    name: 'dish',
     meta: {
-      title: 'Dish',
-      icon: 'caipin'
+      title: 'dashboard',
+      icon: 'dashboard'
     },
     children: [{
-      path: 'dish-manage',
-      component: () => import('@/views/dish/dish-manage'),
-      name: 'DishManage',
+      path: 'dashboard',
+      name: 'dashboard',
+      component: () => import('@/views/dashboard/dashboard'),
       meta: {
-        title: 'DishManage',
-        icon: 'manage'
+        title: 'dashboard',
+        icon: 'dashboard'
       }
-    },
-    {
-      path: 'category-manage',
-      component: () => import('@/views/dish/category-manage'),
-      name: 'CategoryManage',
-      meta: {
-        title: 'CategoryManage',
-        icon: 'fenlei'
-      }
-    }
-    ]
-  },
-  // 餐厅管理(餐厅管理 菜单管理 菜单菜品管理)
-  {
-    path: '/shop',
-    component: Layout,
-    redirect: '/shop/restaurant-manage',
-    name: 'shop',
-    meta: {
-      title: 'Shop',
-      icon: 'canting_1'
-    },
-    children: [{
-      path: 'restaurant-manage',
-      component: () => import('@/views/shop/restaurant-manage'),
-      name: 'RestaurantManage',
-      meta: {
-        title: 'RestaurantManage',
-        icon: 'canting'
-      }
-    },
-    {
-      path: 'menu-manage',
-      component: () => import('@/views/shop/menu-manage'),
-      name: 'MenuManage',
-      meta: {
-        title: 'MenuManage',
-        icon: 'navicon-ctgl'
-      }
-    },
-    {
-      path: 'menu-cat-manage',
-      component: () => import('@/views/shop/menu-cat-manage'),
-      name: 'MenuCatManage',
-      meta: {
-        title: 'MenuCatManage',
-        icon: 'fenlei'
-      },
-      hidden: true
-    },
-    {
-      path: 'menu-food-manage',
-      component: () => import('@/views/shop/menu-food-manage'),
-      name: 'MenuFoodManage',
-      meta: {
-        title: 'MenuFoodManage',
-        icon: 'navicon-cprkd'
-      },
-      hidden: true
-    },
-    {
-      path: 'room-manage',
-      component: () => import('@/views/shop/room-manage'),
-      name: 'RoomManage',
-      meta: {
-        title: 'RoomManage',
-        icon: 'fangjian'
-      },
-      hidden: true
-    },
-    {
-      path: 'desk-manage',
-      component: () => import('@/views/shop/desk-manage'),
-      name: 'DeskManage',
-      meta: {
-        title: 'DeskManage',
-        icon: 'fanzhuo'
-      },
-      hidden: true
-    }
-
-    ]
-  },
-  // 员工相关
-  {
-    path: '/employee',
-    component: Layout,
-    redirect: '/employee/employee-manage',
-    children: [{
-      path: 'employee-manage',
-      name: 'employee',
-      component: () => import('@/views/employee/employee-manage'),
-      meta: { title: 'EmployeeManage', icon: 'yuangong' }
-    }]
-  },
-  // 优惠券相关
-  {
-    path: '/coupon',
-    component: Layout,
-    redirect: '/coupon/coupon-manage',
-    children: [{
-      path: 'coupon-manage',
-      name: 'coupon',
-      component: () => import('@/views/coupon/coupon-manage'),
-      meta: { title: 'CouponManage', icon: 'youhuiquan' }
-    }]
-  },
-  // 订单相关
-  {
-    path: '/order',
-    component: Layout,
-    redirect: '/order/order-manage',
-    name: 'order',
-    meta: {
-      title: 'order',
-      icon: 'dingdan'
-    },
-    children: [{
-      path: 'order-manage',
-      name: 'OrderManage',
-      component: () => import('@/views/order/order-manage'),
-      meta: { title: 'OrderManage', icon: 'dingdan' }
-    },
-    {
-      path: 'order-detail',
-      name: 'OrderDetail',
-      component: () => import('@/views/order/order-detail'),
-      meta: { title: 'OrderDetail', icon: 'dingdan' },
-      hidden: true
-    },
-    {
-      path: 'place-order',
-      name: 'PlaceOrder',
-      component: () => import('@/views/order/place-order'),
-      meta: { title: 'PlaceOrder', icon: 'xiadan' }
-    }]
-  },
-  // 报表相关
-  {
-    path: '/charts',
-    component: Layout,
-    redirect: '/charts/order-report',
-    name: 'report',
-    meta: {
-      title: 'report',
-      icon: 'report'
-    },
-    children: [{
-      path: 'order-report',
-      name: 'OrderReport',
-      component: () => import('@/views/charts/order-report'),
-      meta: { title: 'OrderReport', icon: 'report' }
-    },
-    {
-      path: 'dish-report',
-      name: 'DishReport',
-      component: () => import('@/views/charts/dish-report'),
-      meta: { title: 'DishReport', icon: 'report' }
-    }]
-  },
-  // 用户相关
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/admin-manage',
-    name: 'User',
-    meta: {
-      title: 'User',
-      icon: 'user'
-    },
-    children: [{
-      path: 'admin-manage',
-      name: 'AdminManage',
-      component: () => import('@/views/user/admin-manage'),
-      meta: { title: 'AdminManage', icon: 'admin' },
-      hidden: true
-    },
-    {
-      path: 'user-manage',
-      name: 'UserManage',
-      component: () => import('@/views/user/user-manage'),
-      meta: { title: 'UserManage', icon: 'user' }
-    },
-    {
-      path: 'user-info',
-      name: 'UserInfo',
-      component: () => import('@/views/user/user-info'),
-      meta: { title: 'UserInfo', icon: 'userInfo' },
-      hidden: true
-    },
-    {
-      path: 'role-permission',
-      name: 'RolePermission',
-      component: () => import('@/views/user/role-permission'),
-      meta: { title: 'RolePermission', icon: 'role' }
-    },
-    {
-      path: 'change-pass',
-      name: 'ChangePass',
-      component: () => import('@/views/user/change-pass'),
-      meta: { title: 'ChangePass', icon: 'pass' },
-      hidden: true
     }]
   },
   // 锁屏
@@ -304,6 +86,290 @@ export default new Router({
   routes: constantRouterMap
 })
 export const asyncRouterMap = [
+  // 餐厅相关
+  {
+    path: '/dish',
+    component: Layout,
+    redirect: '/dish/dish-manage',
+    name: 'dish',
+    meta: {
+      title: 'Dish',
+      icon: 'caipin',
+      roles: ['QUERY_FOOD']
+    },
+    children: [{
+      path: 'dish-manage',
+      component: () => import('@/views/dish/dish-manage'),
+      name: 'DishManage',
+      meta: {
+        title: 'DishManage',
+        icon: 'manage',
+        roles: ['QUERY_FOOD']
+      }
+    },
+    {
+      path: 'category-manage',
+      component: () => import('@/views/dish/category-manage'),
+      name: 'CategoryManage',
+      meta: {
+        title: 'CategoryManage',
+        icon: 'fenlei',
+        roles: ['QUERY_CAT']
+      }
+    }
+    ]
+  },
+  // 餐厅管理(餐厅管理 菜单管理 菜单菜品管理)
+  {
+    path: '/shop',
+    component: Layout,
+    redirect: '/shop/restaurant-manage',
+    name: 'shop',
+    meta: {
+      title: 'Shop',
+      icon: 'canting_1',
+      roles: ['QUERY_SHOP']
+    },
+    children: [{
+      path: 'restaurant-manage',
+      component: () => import('@/views/shop/restaurant-manage'),
+      name: 'RestaurantManage',
+      meta: {
+        title: 'RestaurantManage',
+        icon: 'canting',
+        roles: ['QUERY_SHOP']
+      }
+    },
+    {
+      path: 'menu-manage',
+      component: () => import('@/views/shop/menu-manage'),
+      name: 'MenuManage',
+      meta: {
+        title: 'MenuManage',
+        icon: 'navicon-ctgl',
+        roles: ['QUERY_MENU']
+      }
+    },
+    {
+      path: 'menu-cat-manage',
+      component: () => import('@/views/shop/menu-cat-manage'),
+      name: 'MenuCatManage',
+      meta: {
+        title: 'MenuCatManage',
+        icon: 'fenlei',
+        roles: ['QUERY_MENU']
+      },
+      hidden: true
+    },
+    {
+      path: 'menu-food-manage',
+      component: () => import('@/views/shop/menu-food-manage'),
+      name: 'MenuFoodManage',
+      meta: {
+        title: 'MenuFoodManage',
+        icon: 'navicon-cprkd',
+        roles: ['QUERY_MENU']
+      },
+      hidden: true
+    },
+    {
+      path: 'room-manage',
+      component: () => import('@/views/shop/room-manage'),
+      name: 'RoomManage',
+      meta: {
+        title: 'RoomManage',
+        icon: 'fangjian',
+        roles: ['QUERY_SHOP']
+      },
+      hidden: true
+    },
+    {
+      path: 'desk-manage',
+      component: () => import('@/views/shop/desk-manage'),
+      name: 'DeskManage',
+      meta: {
+        title: 'DeskManage',
+        icon: 'fanzhuo',
+        roles: ['QUERY_SHOP']
+      },
+      hidden: true
+    }
+
+    ]
+  },
+  // 员工相关
+  {
+    path: '/employee',
+    component: Layout,
+    redirect: '/employee/employee-manage',
+    children: [{
+      path: 'employee-manage',
+      name: 'employee',
+      component: () => import('@/views/employee/employee-manage'),
+      meta: {
+        title: 'EmployeeManage',
+        icon: 'yuangong',
+        roles: ['QUERY_EMPLOYEE']
+      }
+    }]
+  },
+  // 优惠券相关
+  {
+    path: '/coupon',
+    component: Layout,
+    redirect: '/coupon/coupon-manage',
+    children: [{
+      path: 'coupon-manage',
+      name: 'coupon',
+      component: () => import('@/views/coupon/coupon-manage'),
+      meta: {
+        title: 'CouponManage',
+        icon: 'youhuiquan',
+        roles: ['QUERY_COUPON']
+      }
+    }]
+  },
+  // 订单相关
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/order-manage',
+    name: 'order',
+    meta: {
+      title: 'order',
+      icon: 'dingdan',
+      roles: ['QUERY_ORDER']
+    },
+    children: [{
+      path: 'order-manage',
+      name: 'OrderManage',
+      component: () => import('@/views/order/order-manage'),
+      meta: {
+        title: 'OrderManage',
+        icon: 'dingdan',
+        roles: ['QUERY_ORDER']
+      }
+    },
+    {
+      path: 'order-detail',
+      name: 'OrderDetail',
+      component: () => import('@/views/order/order-detail'),
+      meta: {
+        title: 'OrderDetail',
+        icon: 'dingdan',
+        roles: ['QUERY_ORDER']
+      },
+      hidden: true
+    },
+    {
+      path: 'place-order',
+      name: 'PlaceOrder',
+      component: () => import('@/views/order/place-order'),
+      meta: {
+        title: 'PlaceOrder',
+        icon: 'xiadan',
+        roles: ['SEETTLEMENT']
+      }
+    }
+    ]
+  },
+  // 报表相关
+  {
+    path: '/charts',
+    component: Layout,
+    redirect: '/charts/order-report',
+    name: 'report',
+    meta: {
+      title: 'report',
+      icon: 'report',
+      roles: ['REPORT']
+    },
+    children: [{
+      path: 'order-report',
+      name: 'OrderReport',
+      component: () => import('@/views/charts/order-report'),
+      meta: {
+        title: 'OrderReport',
+        icon: 'report',
+        roles: ['REPORT']
+      }
+    },
+    {
+      path: 'dish-report',
+      name: 'DishReport',
+      component: () => import('@/views/charts/dish-report'),
+      meta: {
+        title: 'DishReport',
+        icon: 'report',
+        roles: ['REPORT']
+      }
+    }
+    ]
+  },
+  // 用户相关
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/admin-manage',
+    name: 'User',
+    meta: {
+      title: 'User',
+      icon: 'user',
+      roles: ['USER_MANAGE']
+    },
+    children: [{
+      path: 'admin-manage',
+      name: 'AdminManage',
+      component: () => import('@/views/user/admin-manage'),
+      meta: {
+        title: 'AdminManage',
+        icon: 'admin',
+        roles: ['QUERY_USER']
+      },
+      hidden: true
+    },
+    {
+      path: 'user-manage',
+      name: 'UserManage',
+      component: () => import('@/views/user/user-manage'),
+      meta: {
+        title: 'UserManage',
+        icon: 'user',
+        roles: ['QUERY_USER']
+      }
+    },
+    {
+      path: 'user-info',
+      name: 'UserInfo',
+      component: () => import('@/views/user/user-info'),
+      meta: {
+        title: 'UserInfo',
+        icon: 'userInfo'
+      },
+      hidden: true
+    },
+    {
+      path: 'role-permission',
+      name: 'RolePermission',
+      component: () => import('@/views/user/role-permission'),
+      meta: {
+        title: 'RolePermission',
+        icon: 'role',
+        roles: ['QUERY_ROLE']
+      }
+    },
+    {
+      path: 'change-pass',
+      name: 'ChangePass',
+      component: () => import('@/views/user/change-pass'),
+      meta: {
+        title: 'ChangePass',
+        icon: 'pass'
+      },
+      hidden: true
+    }
+    ]
+  },
   {
     path: '/error',
     component: Layout,

@@ -44,6 +44,16 @@ export function haspay(id) {
     }
   })
 }
+
+export function takeOrder(id) {
+  return request({
+    url: '/order/restaurant/takeorder',
+    method: 'put',
+    params: {
+      id
+    }
+  })
+}
 export function getOrderDetailPage(params) {
   return request({
     url: '/order/detail/page',

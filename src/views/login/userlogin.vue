@@ -31,31 +31,29 @@
         <i slot="prefix" class="icon-mima"></i>
       </el-input>
     </el-form-item>
-    
-      <drag-verify
-        :width="width"
-        :height="height"
-        :text="text"
-        :success-text="successText"
-        :background="background"
-        :progress-bar-bg="progressBarBg"
-        :completed-bg="completedBg"
-        :handler-bg="handlerBg"
-        :handler-icon="handlerIcon"
-        :text-size="textSize"
-        :success-icon="successIcon"
-        ref="Verify"
-      ></drag-verify>
-    
     <el-checkbox v-model="checked">记住账号</el-checkbox>
     <el-form-item>
+      <slide-verify
+        :l="42"
+        :r="10"
+        :w="310"
+        :h="155"
+        @success="onSuccess"
+        @fail="onFail"
+        @refresh="onRefresh"
+        :slider-text="text"
+      ></slide-verify>
+    </el-form-item>
+
+    
+    <!-- <el-form-item>
       <el-button
         type="primary"
         size="small"
         @click.native.prevent="handleLogin"
         class="login-submit"
       >登录</el-button>
-    </el-form-item>
+    </el-form-item> -->
   </el-form>
 </template>
 
@@ -64,12 +62,8 @@ import { isvalidUsername } from "@/utils/validate";
 import { setRememberMe, getRememberMe, setNotRememberMe } from "@/utils/auth";
 import Vue from "vue";
 import "font-awesome/css/font-awesome.min.css";
-import dragVerify from "vue-drag-verify";
 export default {
   name: "userlogin",
-  components: {
-    dragVerify
-  },
   data() {
     const validateUsername = (rule, value, callback) => {
       callback();
@@ -88,18 +82,6 @@ export default {
         username: "",
         password: ""
       },
-      handlerIcon: "fa fa-angle-double-right",
-      successIcon: "fa fa-check",
-      background: "#cccccc",
-      progressBarBg: "#4b0",
-      completedBg: "#66cc66",
-      handlerBg: "#fff",
-      text: "向右滑动登录",
-      successText: "验证完成",
-      width: 270,
-      height: 35,
-      textSize: "18px",
-      isCircle: "true",
       checked: false,
       // isPassing = this.$refs.Verify.isPassing,
       code: {
@@ -122,7 +104,8 @@ export default {
           { required: true, trigger: "blur", validator: validateCode }
         ]
       },
-      passwordType: "password"
+      passwordType: "password",
+      text: "向右滑"
     };
   },
   created() {},
@@ -130,6 +113,15 @@ export default {
   computed: {},
   props: [],
   methods: {
+    onSuccess() {
+      this.handleLogin()
+    },
+    onFail() {
+      
+    },
+    onRefresh() {
+      
+    },
     showPassword() {
       this.passwordType === ""
         ? (this.passwordType = "password")
@@ -148,17 +140,12 @@ export default {
           this.$store.dispatch("Login", this.loginForm).then(res => {
             this.$router.push({ path: "/dashboard/dashboard" });
           });
+        }else{
+          this.onRefresh()
         }
       });
     }
-  },
-  // watch: {
-  //   isPassing: function(val) {
-  //     if (val === true) {
-  //       handleLogin()
-  //     }
-  //   }
-  // }
+  }
 };
 </script>
 <style>

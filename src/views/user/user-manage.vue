@@ -131,7 +131,7 @@
           <el-input v-model="editForm.password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="头像" prop="icon">
-          <img v-if="dialogStatus === 'update'" :src="editForm.icon" alt="头像">
+          <img v-if="dialogStatus === 'update'" width="70" height="70" :src="editForm.icon" alt="头像">
           <el-upload
             action="http://api.anntly.com/api/upload/image"
             list-type="picture-card"
