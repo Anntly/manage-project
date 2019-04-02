@@ -72,6 +72,7 @@
       <el-table-column sortable="custom" prop="update_time" label="更新时间" width="120"></el-table-column>
       <el-table-column label="操作" width="350">
         <template slot-scope="scope">
+          <el-button size="small" @click="handleQrCode(scope.$index, scope.row)">生成二维码</el-button>
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -88,6 +89,10 @@
         style="float:right;"
       ></el-pagination>
     </el-col>
+
+    <el-dialog title="二维码" :visible.sync="dialogQrCodeVisible">
+      <img :src="qrCode" width="150" height="150">
+    </el-dialog>
 
     <!--编辑界面-->
     <el-dialog
@@ -125,7 +130,7 @@
         <el-form-item label="餐桌状态" prop="status">
           <el-switch active-text="可使用" inactive-text="使用中" v-model="editForm.status"></el-switch>
         </el-form-item>
-        <el-form-item label="二维码" prop="qrCode">
+        <!-- <el-form-item label="二维码" prop="qrCode">
           <el-upload
             action="http://api.anntly.com/api/upload/image"
             list-type="picture-card"
@@ -147,7 +152,7 @@
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="dialogFormVisible=false">取消</el-button>
@@ -159,7 +164,7 @@
 </template>
 <script>
 import { getMenuNodes } from "@/api/dishMenu";
-import { getDeskListPage, editDesk, addDesk, removeDesk, batchRemoveDesk } from "@/api/restaurant";
+import { getDeskListPage, editDesk, addDesk, removeDesk, batchRemoveDesk, getQrCode } from "@/api/restaurant";
 import QS from "qs";
 import { Message, MessageBox } from "element-ui";
 
@@ -169,6 +174,8 @@ export default {
   name: "DeskManage",
   data() {
     return {
+      dialogQrCodeVisible: false,
+      qrCode: null,
       myHeaders: {Authorization: token},
       roomId: this.$route.params.id,
       roomName: this.$route.params.roomName,
@@ -344,6 +351,18 @@ export default {
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
       this.editForm = Object.assign({}, row);
+    },
+    // 生成二维码
+    handleQrCode(index, row) {
+      const para = {
+        restaurantId: this.restaurantId,
+        deskId: row.id
+      }
+      getQrCode(para).then(res => {
+        var src='data:image/jpg;base64,'+ btoa(new Uint8Array(res).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        this.qrCode = src
+        this.dialogQrCodeVisible = true
+      })
     },
     // 显示新增界面
     handleAdd() {

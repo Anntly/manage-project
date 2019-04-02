@@ -111,3 +111,11 @@ export function batchRemoveDesk(params) {
     params: params
   })
 }
+export function getQrCode(params) {
+  return request({
+    url: '/shop/Qrcode/getQ',
+    method: 'get',
+    responseType: 'arraybuffer',
+    params: params
+  })
+}
